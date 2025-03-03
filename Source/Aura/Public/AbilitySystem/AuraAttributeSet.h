@@ -87,7 +87,7 @@ public:
 
 	/* ------------------------------------------
 	 * Vital Attributes
-	 * ------------------------------------------*/
+	 * ------------------------------------------ */
 	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
