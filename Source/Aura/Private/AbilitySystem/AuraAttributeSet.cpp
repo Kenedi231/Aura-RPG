@@ -61,16 +61,6 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
-
-	if (Attribute == GetHealthAttribute())
-	{
-		NewValue = FMath::Clamp<float>(NewValue, 0.0f, GetMaxHealth());
-	}
-	
-	if (Attribute == GetManaAttribute())
-	{
-		NewValue = FMath::Clamp<float>(NewValue, 0.0f, GetMaxMana());
-	}
 }
 
 void UAuraAttributeSet::SetEffectProperties(const struct FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
