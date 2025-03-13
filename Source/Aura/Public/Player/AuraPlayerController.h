@@ -27,6 +27,8 @@ public:
 	AAuraPlayerController();
 
 	virtual void PlayerTick(float DeltaTime) override;
+
+	void GetCurrentCursorHit(FHitResult& Hit) const { Hit = CursorHit; }
 	
 protected:
 	virtual void BeginPlay() override;
