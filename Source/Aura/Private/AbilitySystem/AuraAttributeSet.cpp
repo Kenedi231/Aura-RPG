@@ -38,7 +38,7 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// Primary Attributes	
+	// Primary Attributes
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Strength, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Intelligence, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resilience, COND_None, REPNOTIFY_Always);
