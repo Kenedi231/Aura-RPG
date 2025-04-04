@@ -32,7 +32,7 @@ public:
 	void GetCurrentCursorHit(FHitResult& Hit) const { Hit = CursorHit; }
 
 	UFUNCTION(Client, Reliable)
-	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter);
+	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit);
 	
 protected:
 	virtual void BeginPlay() override;
