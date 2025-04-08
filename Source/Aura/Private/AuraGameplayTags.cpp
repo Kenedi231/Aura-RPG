@@ -55,5 +55,7 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	
 	// Effects
 	GameplayTags.Effects_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Effects.HitReact"), FString("Tag granted when Hit Reacting"));
+
+	GameplayTags.bInitialized = true;
 }
 
