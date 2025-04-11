@@ -26,6 +26,8 @@ AAuraEnemy::AAuraEnemy()
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
+
+	Tags.Emplace(ACTOR_TAG_ENEMY);
 }
 
 void AAuraEnemy::PossessedBy(AController* NewController)
