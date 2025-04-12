@@ -27,6 +27,12 @@ AAuraEnemy::AAuraEnemy()
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
 
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationPitch = false;
+
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
 	Tags.Emplace(ACTOR_TAG_ENEMY);
 }
 
