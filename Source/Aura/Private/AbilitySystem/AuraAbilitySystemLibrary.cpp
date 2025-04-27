@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AuraAbilityTypes.h"
+#include "Aura/Aura.h"
 #include "Game/AuraGameModeBase.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -159,4 +160,12 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldC
 			}
 		}
 	}
+}
+
+bool UAuraAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondActor)
+{
+	const bool bFirstIsPlayer = FirstActor->ActorHasTag(ACTOR_TAG_PLAYER);
+	const bool bSecondIsPlayer = SecondActor->ActorHasTag(ACTOR_TAG_PLAYER);
+
+	return bFirstIsPlayer != bSecondIsPlayer;
 }
