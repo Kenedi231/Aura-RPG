@@ -166,6 +166,11 @@ bool UAuraAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondAc
 {
 	const bool bFirstIsPlayer = FirstActor->ActorHasTag(ACTOR_TAG_PLAYER);
 	const bool bSecondIsPlayer = SecondActor->ActorHasTag(ACTOR_TAG_PLAYER);
+	const bool bFirstIsEnemy = FirstActor->ActorHasTag(ACTOR_TAG_ENEMY);
+	const bool bSecondIsEnemy = SecondActor->ActorHasTag(ACTOR_TAG_ENEMY);
 
-	return bFirstIsPlayer != bSecondIsPlayer;
+	const bool bBothPlayers = bFirstIsPlayer && bSecondIsPlayer;
+	const bool bBothEnemies = bFirstIsEnemy && bSecondIsEnemy;
+
+	return !(bBothPlayers || bBothEnemies);
 }
