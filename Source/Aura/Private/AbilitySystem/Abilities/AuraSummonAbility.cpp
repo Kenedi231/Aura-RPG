@@ -21,7 +21,7 @@ TArray<FVector> UAuraSummonAbility::GetSpawnLocations()
 		GetWorld()->LineTraceSingleByChannel(Hit, ChosenSpawnLocation + FVector(0.0f, 0.0f, 400.0f), ChosenSpawnLocation - FVector(0.0f, 0.0f, 400.0f), ECollisionChannel::ECC_Visibility);
 		if (Hit.bBlockingHit)
 		{
-			ChosenSpawnLocation = Hit.ImpactPoint;
+			ChosenSpawnLocation = Hit.ImpactPoint; 
 		}
 
 		SpawnLocations.Add(ChosenSpawnLocation);
