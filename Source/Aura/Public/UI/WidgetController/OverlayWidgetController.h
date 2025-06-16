@@ -9,7 +9,6 @@
 
 class UAuraAbilitySystemComponent;
 class UAbilityInfo;
-class FAuraAbilityInfo;
 struct FOnAttributeChangeData;
 class UAuraUserWidget;
 
