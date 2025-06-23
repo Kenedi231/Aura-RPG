@@ -22,6 +22,8 @@ AAuraCharacter::AAuraCharacter()
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
 
+	CharacterClass = ECharacterClass::Elementalist;
+
 	Tags.Emplace(ACTOR_TAG_PLAYER);
 }
 
