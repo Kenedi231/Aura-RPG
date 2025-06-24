@@ -40,6 +40,9 @@ public:
 	FGameplayTag Attributes_Secondary_ManaRegeneration;
 	FGameplayTag Attributes_Secondary_MaxHealth;
 	FGameplayTag Attributes_Secondary_MaxMana;
+	
+	/* Meta Attributes */
+	FGameplayTag Attributes_Meta_IncomingXP;
 
 	// Resistance of Damage Types
 	FGameplayTag Attributes_Resistance_Fire;
