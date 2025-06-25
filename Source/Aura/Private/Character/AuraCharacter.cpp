@@ -27,6 +27,14 @@ AAuraCharacter::AAuraCharacter()
 	Tags.Emplace(ACTOR_TAG_PLAYER);
 }
 
+void AAuraCharacter::AddToXP_Implementation(int32 InXP)
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+
+	AuraPlayerState->AddToXP(InXP);
+}
+
 void AAuraCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
@@ -44,7 +52,7 @@ void AAuraCharacter::OnRep_PlayerState()
 
 int32 AAuraCharacter::GetPlayerLevel()
 {
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
 
 	return AuraPlayerState->GetPlayerLevel();
