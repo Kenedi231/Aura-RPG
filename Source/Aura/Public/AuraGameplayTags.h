@@ -76,6 +76,8 @@ public:
 	FGameplayTag Abilities_Type_Passive;
 	FGameplayTag Abilities_Type_None;
 
+	FGameplayTag Abilities_None;
+
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
 
