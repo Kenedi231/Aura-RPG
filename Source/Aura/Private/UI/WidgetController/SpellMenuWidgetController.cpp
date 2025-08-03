@@ -63,6 +63,13 @@ void USpellMenuWidgetController::EvaluateAbilityButtonStates(const int32 SpellPo
 void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityTag)
 {
 	const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
+
+	if (bWaitingForEquipSelection)
+	{
+		const FGameplayTag SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(AbilityTag).AbilityType;
+		StopWaitingForEquipSelectionDelegate.Broadcast(SelectedAbilityType);
+		bWaitingForEquipSelection = false;
+	}
 	
 	const int32 SpellPoints = GetAuraPS()->GetSpellPoints();
 	FGameplayAbilitySpec* AbilitySpec = GetAuraASC()->GetSpecFromAbilityTag(AbilityTag);
@@ -84,6 +91,13 @@ void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityT
 
 void USpellMenuWidgetController::SpellGlobeDeselected()
 {
+	if (bWaitingForEquipSelection)
+	{
+		const FGameplayTag SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+		StopWaitingForEquipSelectionDelegate.Broadcast(SelectedAbilityType);
+		bWaitingForEquipSelection = false;
+	}
+	
 	SelectedAbility.Ability = FAuraGameplayTags::Get().Abilities_None;
 	SelectedAbility.Status = FAuraGameplayTags::Get().Abilities_Status_Locked;
 
@@ -96,6 +110,14 @@ void USpellMenuWidgetController::SpendPointButtonPressed()
 	{
 		GetAuraASC()->ServerSpendSpellPoint(SelectedAbility.Ability);
 	}
+}
+
+void USpellMenuWidgetController::EquipButtonPressed()
+{
+	const FGameplayTag SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+
+	WaitForEquipSelectionDelegate.Broadcast(SelectedAbilityType);
+	bWaitingForEquipSelection = true;
 }
 
 void USpellMenuWidgetController::ShouldEnableButtons(const FGameplayTag& AbilityStatus, int32 SpellPoints,
