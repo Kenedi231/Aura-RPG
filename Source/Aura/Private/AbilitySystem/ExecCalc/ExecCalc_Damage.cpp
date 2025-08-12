@@ -77,8 +77,37 @@ UExecCalc_Damage::UExecCalc_Damage()
 	RelevantAttributesToCapture.Add(DamageStatics().PhysicalResistanceDef);
 }
 
+void UExecCalc_Damage::DetermineDebuff(const FGameplayEffectCustomExecutionParameters& ExecutionParams, const FGameplayEffectSpec& Spec, FAggregatorEvaluateParameters EvaluationParameters) const
+{
+	const FAuraGameplayTags AuraGameplayTags = FAuraGameplayTags::Get();
+
+	// Debuff
+	for (TTuple<FGameplayTag, FGameplayTag> Pair : AuraGameplayTags.DamageTypesToDebuffs)
+	{
+		const FGameplayTag& DamageType = Pair.Key;
+		const FGameplayTag& DebuffType = Pair.Value;
+		
+		const float TypeDamage = Spec.GetSetByCallerMagnitude(DamageType, false, -1.0f);
+		if (TypeDamage < -0.5f) continue;
+
+		const float SourceDebuffChance = Spec.GetSetByCallerMagnitude(AuraGameplayTags.Debuff_Chance, false, -1.0f);
+
+		float TargetDebuffResistance = 0.0f;
+		const FGameplayTag& ResistanceTag = AuraGameplayTags.DamageTypesToResistances[DamageType];
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().TagsToCaptureDefs[ResistanceTag], EvaluationParameters, TargetDebuffResistance);
+		TargetDebuffResistance = FMath::Max<float>(TargetDebuffResistance, 0.0f);
+
+		const float EffectiveDebuffChance = SourceDebuffChance * (100 - TargetDebuffResistance) / 100.0f;
+		const bool bDebuff = FMath::RandRange(1, 100) < EffectiveDebuffChance;
+		if (bDebuff)
+		{
+			
+		}
+	}
+}
+
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-	FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
+                                              FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
 	const UAbilitySystemComponent* SourceASC = ExecutionParams.GetSourceAbilitySystemComponent();
 	const UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
@@ -107,12 +136,13 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	FAggregatorEvaluateParameters EvaluationParameters;
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
+	
+	DetermineDebuff(ExecutionParams, Spec, EvaluationParameters);
 
 	// Get Damage Set By Caller Magnitude
-	FAuraGameplayTags AuraGameplayTags = FAuraGameplayTags::Get();
 	
 	float Damage = 0.0f;
-	for (const auto& Pair : AuraGameplayTags.DamageTypesToResistances)
+	for (const auto& Pair : FAuraGameplayTags::Get().DamageTypesToResistances)
 	{
 		const FGameplayTag DamageTypeTag = Pair.Key;
 		const FGameplayTag ResistanceTag = Pair.Value;
