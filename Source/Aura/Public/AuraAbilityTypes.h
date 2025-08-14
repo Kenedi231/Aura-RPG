@@ -66,7 +66,7 @@ public:
 	void SetDebuffDamage(float InDebuffDamage) { DebuffDamage = InDebuffDamage; }
 	void SetDebuffDuration(float InDebuffDuration) { DebuffDuration = InDebuffDuration; }
 	void SetDebuffFrequency(float InDebuffFrequency) { DebuffFrequency = InDebuffFrequency; }
-	void SetDamageType(const FGameplayTag& InDamageType) { DamageType = MakeShareable(new FGameplayTag(InDamageType)); }
+	void SetDamageType(const TSharedPtr<FGameplayTag>& InDamageType) { DamageType = InDamageType; }
 	
 	virtual UScriptStruct* GetScriptStruct() const
 	{
