@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Debuff")
 	float DebuffDuration = 5.0f;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Debuff")
+	float DeathImpulseMagnitude = 60.0f;
+	
 
 	UFUNCTION(BlueprintPure)
 	FTaggedMontage GetRandomTaggedMontageFromArray(const TArray<FTaggedMontage>& TaggedMontages) const;
