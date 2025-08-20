@@ -30,6 +30,7 @@ public:
 	
 	/* Combat Interface */
 	virtual void Die(const FVector& DeathImpulse) override;
+	virtual void KnockbackForce(const FVector& InKnockbackForce) override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
 	virtual bool IsDead_Implementation() const override;

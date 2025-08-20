@@ -91,6 +91,12 @@ void AAuraEnemy::Die(const FVector& DeathImpulse)
 	Super::Die(DeathImpulse);
 }
 
+void AAuraEnemy::KnockbackForce(const FVector& InKnockbackForce)
+{
+	AuraAIController->StopMovement();
+	Super::KnockbackForce(InKnockbackForce);
+}
+
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
