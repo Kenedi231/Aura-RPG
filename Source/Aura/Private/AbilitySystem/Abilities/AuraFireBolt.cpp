@@ -2,6 +2,7 @@
 
 
 #include "AbilitySystem/Abilities/AuraFireBolt.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 FString UAuraFireBolt::GetDescription(int32 Level)
@@ -32,7 +33,7 @@ FString UAuraFireBolt::GetDescription(int32 Level)
 		"exploding on impact and dealing: </>"
 		"<Damage>%d</><Default> fire damage with"
 		" a chance to burn</>"),
-		Level, -ManaCost, Cooldown, FMath::Min(NumProjectiles, Level), ScaledDamage);
+		Level, -ManaCost, Cooldown, FMath::Min(MaxNumProjectiles, Level), ScaledDamage);
 }
 
 FString UAuraFireBolt::GetNextLevelDescription(int32 Level)
@@ -49,5 +50,40 @@ FString UAuraFireBolt::GetNextLevelDescription(int32 Level)
 		"exploding on impact and dealing: </>"
 		"<Damage>%d</><Default> fire damage with"
 		" a chance to burn</>"),
-		Level, -ManaCost, Cooldown, FMath::Min(NumProjectiles, Level), ScaledDamage);
+		Level, -ManaCost, Cooldown, FMath::Min(MaxNumProjectiles, Level), ScaledDamage);
+}
+
+void UAuraFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag,
+	bool bOverridePitch, float PitchOverride, AActor* HomingTarget)
+{
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
+	if (!bIsServer) return;
+	
+	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo(), SocketTag);
+	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
+	if (bOverridePitch) Rotation.Pitch = PitchOverride;
+	
+	const FVector Forward = Rotation.Vector();
+	const FVector LeftOfSpread = Forward.RotateAngleAxis(-ProjectileSpread / 2, FVector::UpVector);
+
+	const FVector Start = SocketLocation + FVector(0, 0,5.0f);
+	
+	const int32 NumProjectiles = FMath::Min(MaxNumProjectiles, 5);
+	if (NumProjectiles > 1)
+	{
+		const float DeltaSpread = ProjectileSpread / (NumProjectiles - 1);
+		for (int32 i = 0; i < NumProjectiles; i++)
+		{
+			const FVector Direction = LeftOfSpread.RotateAngleAxis(DeltaSpread * i, FVector::UpVector);
+			
+			UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), Start, Start + Direction * 75.0f, 5, FLinearColor::Red, 120.0f, 1.0f);
+		}
+	} else
+	{
+		// Single Projectile
+		UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), Start, Start + Forward * 75.0f, 5, FLinearColor::Red, 120.0f, 1.0f);
+	}
+
+	UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), SocketLocation, SocketLocation + Rotation.Vector() * 100.0f, 5, FLinearColor::White, 120.0f, 5.0f);
+	
 }
