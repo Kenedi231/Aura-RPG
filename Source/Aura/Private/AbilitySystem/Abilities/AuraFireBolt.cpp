@@ -2,8 +2,9 @@
 
 
 #include "AbilitySystem/Abilities/AuraFireBolt.h"
-#include "Kismet/KismetSystemLibrary.h"
 
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
+#include "Actor/AuraProjectile.h"
 
 FString UAuraFireBolt::GetDescription(int32 Level)
 {
@@ -64,26 +65,26 @@ void UAuraFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, co
 	if (bOverridePitch) Rotation.Pitch = PitchOverride;
 	
 	const FVector Forward = Rotation.Vector();
-	const FVector LeftOfSpread = Forward.RotateAngleAxis(-ProjectileSpread / 2, FVector::UpVector);
+	const int32 NumProjectiles = FMath::Min(MaxNumProjectiles, GetAbilityLevel());
 
-	const FVector Start = SocketLocation + FVector(0, 0,5.0f);
+	TArray<FRotator> Rotations = UAuraAbilitySystemLibrary::EvenlySpacedRotators(Forward, FVector::UpVector, ProjectileSpread, NumProjectiles);
+
+	for (const FRotator& Rot : Rotations)
+	{
+		FTransform SpawnTransform;
+		SpawnTransform.SetLocation(SocketLocation);
+		SpawnTransform.SetRotation(Rot.Quaternion());
+
+		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>( 
+			ProjectileClass,
+			SpawnTransform,
+			GetOwningActorFromActorInfo(),
+			Cast<APawn>(GetAvatarActorFromActorInfo()),
+			ESpawnActorCollisionHandlingMethod::AlwaysSpawn
+		);
 	
-	const int32 NumProjectiles = FMath::Min(MaxNumProjectiles, 5);
-	if (NumProjectiles > 1)
-	{
-		const float DeltaSpread = ProjectileSpread / (NumProjectiles - 1);
-		for (int32 i = 0; i < NumProjectiles; i++)
-		{
-			const FVector Direction = LeftOfSpread.RotateAngleAxis(DeltaSpread * i, FVector::UpVector);
-			
-			UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), Start, Start + Direction * 75.0f, 5, FLinearColor::Red, 120.0f, 1.0f);
-		}
-	} else
-	{
-		// Single Projectile
-		UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), Start, Start + Forward * 75.0f, 5, FLinearColor::Red, 120.0f, 1.0f);
+		Projectile->DamageEffectParams = MakeDamageEffectParamsFromClassDefault();
+
+		Projectile->FinishSpawning(SpawnTransform);
 	}
-
-	UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), SocketLocation, SocketLocation + Rotation.Vector() * 100.0f, 5, FLinearColor::White, 120.0f, 5.0f);
-	
 }

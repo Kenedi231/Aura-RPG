@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AuraDamageGameplayAbility.h"
-#include "AbilitySystem/Abilities/AuraGameplayAbility.h"
 #include "AuraProjectileSpell.generated.h"
 
 class AAuraProjectile;
