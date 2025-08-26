@@ -49,6 +49,9 @@ public:
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
+	
+	virtual void OnRep_Stunned() override;
+	virtual void OnRep_Burned() override;
 
 private:
 
