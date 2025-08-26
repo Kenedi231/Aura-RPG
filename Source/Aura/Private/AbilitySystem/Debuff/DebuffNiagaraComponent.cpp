@@ -32,7 +32,7 @@ void UDebuffNiagaraComponent::BeginPlay()
 
 	if (CombatInterface)
 	{
-		CombatInterface->GetOnDeathDelegate().AddDynamic(this, &UDebuffNiagaraComponent::OnOwnerDeath);
+		CombatInterface->GetOnDeathSignature().AddDynamic(this, &UDebuffNiagaraComponent::OnOwnerDeath);
 	}
 	
 }

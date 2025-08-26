@@ -46,6 +46,11 @@ void AAuraCharacterBase::Die(const FVector& DeathImpulse)
 	MulticastHandleDeath(DeathImpulse);
 }
 
+FOnDeathSignature& AAuraCharacterBase::GetOnDeathSignature()
+{
+	return OnDeathSignature;
+}
+
 void AAuraCharacterBase::KnockbackForce(const FVector& InKnockbackForce)
 {
 	LaunchCharacter(InKnockbackForce, true, true);
@@ -73,7 +78,7 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation(const FVector& Deat
 
 	BurnDebuffComponent->Deactivate();
 
-	OnDeath.Broadcast(this);
+	OnDeathSignature.Broadcast(this);
 }
 
 void AAuraCharacterBase::BeginPlay()
@@ -162,11 +167,6 @@ USkeletalMeshComponent* AAuraCharacterBase::GetWeapon_Implementation()
 FOnASCRegistered AAuraCharacterBase::GetOnASCRegisteredDelegate()
 {
 	return OnASCRegistered;
-}
-
-FOnDeath AAuraCharacterBase::GetOnDeathDelegate()
-{
-	return OnDeath;
 }
 
 void AAuraCharacterBase::InitAbilityActorInfo()

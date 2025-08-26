@@ -30,6 +30,7 @@ public:
 	
 	/* Combat Interface */
 	virtual void Die(const FVector& DeathImpulse) override;
+	virtual FOnDeathSignature& GetOnDeathSignature() override;
 	virtual void KnockbackForce(const FVector& InKnockbackForce) override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
@@ -43,11 +44,10 @@ public:
 	virtual ECharacterClass GetCharacterClass_Implementation() override;
 	virtual USkeletalMeshComponent* GetWeapon_Implementation() override;
 	virtual FOnASCRegistered GetOnASCRegisteredDelegate() override;
-	virtual FOnDeath GetOnDeathDelegate() override;
 	/* End Combat Interface */
 
 	FOnASCRegistered OnASCRegistered;
-	FOnDeath OnDeath;
+	FOnDeathSignature OnDeathSignature;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath(const FVector& DeathImpulse);
