@@ -7,6 +7,7 @@
 #include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/Debuff/DebuffNiagaraComponent.h"
+#include "AbilitySystem/Passive/PassiveNiagaraComponent.h"
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -17,13 +18,32 @@ AAuraCharacterBase::AAuraCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
+	
 	BurnDebuffComponent = CreateDefaultSubobject<UDebuffNiagaraComponent>("BurnDebuffComponent");
 	BurnDebuffComponent->SetupAttachment(GetRootComponent());
-	BurnDebuffComponent->DebuffTag = FAuraGameplayTags::Get().Debuff_Burn;
+	BurnDebuffComponent->DebuffTag = GameplayTags.Debuff_Burn;
 
 	StunDebuffComponent = CreateDefaultSubobject<UDebuffNiagaraComponent>("StunDebuffComponent");
 	StunDebuffComponent->SetupAttachment(GetRootComponent());
-	StunDebuffComponent->DebuffTag = FAuraGameplayTags::Get().Debuff_Stun;
+	StunDebuffComponent->DebuffTag = GameplayTags.Debuff_Stun;
+
+	EffectAttachComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EffectAttachComponent"));
+	EffectAttachComponent->SetupAttachment(GetRootComponent());
+	EffectAttachComponent->SetUsingAbsoluteRotation(true);
+	EffectAttachComponent->SetWorldRotation(FRotator::ZeroRotator);
+
+	HaloOfProtectionNiagaraComponent = CreateDefaultSubobject<UPassiveNiagaraComponent>("HaloOfProtectionNiagaraComponent");
+	HaloOfProtectionNiagaraComponent->PassiveSpellTag = GameplayTags.Abilities_Passive_HaloOfProtection;
+	HaloOfProtectionNiagaraComponent->SetupAttachment(EffectAttachComponent);
+
+	LifeSiphonNiagaraComponent = CreateDefaultSubobject<UPassiveNiagaraComponent>("LifeSiphonNiagaraComponent");
+	LifeSiphonNiagaraComponent->PassiveSpellTag = GameplayTags.Abilities_Passive_LifeSiphon;
+	LifeSiphonNiagaraComponent->SetupAttachment(EffectAttachComponent);
+
+	ManaSiphonNiagaraComponent = CreateDefaultSubobject<UPassiveNiagaraComponent>("ManaSiphonNiagaraComponent");
+	ManaSiphonNiagaraComponent->PassiveSpellTag = GameplayTags.Abilities_Passive_ManaSiphon;
+	ManaSiphonNiagaraComponent->SetupAttachment(EffectAttachComponent);
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
