@@ -35,6 +35,9 @@ public:
 	virtual int32 GetAttributePoints_Implementation() const override;
 	virtual void AddToSpellPoints_Implementation(int32 InSpellPoints) override;
 	virtual int32 GetSpellPoints_Implementation() const override;
+
+	virtual void ShowMagicCircle_Implementation(UMaterialInterface* DecalMaterial = nullptr) override;
+	virtual void HideMagicCircle_Implementation() override;
 	
 	/* End Player Interface */
 

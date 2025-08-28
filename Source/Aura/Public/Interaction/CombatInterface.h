@@ -14,6 +14,7 @@ class UAnimMontage;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnASCRegistered, UAbilitySystemComponent*);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeathSignature, AActor*, DeadActor);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnDamageSignature, float /*DamageAmount*/)
 
 USTRUCT(BlueprintType)
 struct FTaggedMontage
@@ -95,6 +96,7 @@ public:
 	USkeletalMeshComponent* GetWeapon();
 
 	virtual FOnASCRegistered& GetOnASCRegisteredDelegate() = 0;
+	virtual FOnDamageSignature& GetOnDamageSignature() = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool IsBeingShocked() const;
