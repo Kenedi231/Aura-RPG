@@ -528,3 +528,32 @@ int32 UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(const UObject* Worl
 
 	return static_cast<int32>(XPReward);
 }
+
+void UAuraAbilitySystemLibrary::SetIsRadialDamageEffectParams(FDamageEffectParams& DamageEffectParams,
+                                                              bool bIsRadialDamageEffect, float InnerRadius, float OuterRadius, FVector Origin)
+{
+	DamageEffectParams.bIsRadialDamage = bIsRadialDamageEffect;
+	DamageEffectParams.RadialDamageInnerRadius = InnerRadius;
+	DamageEffectParams.RadialDamageOuterRadius = OuterRadius;
+	DamageEffectParams.RadialDamageOrigin = Origin;
+}
+
+void UAuraAbilitySystemLibrary::SetKnockbackDirection(FDamageEffectParams& DamageEffectParams,
+                                                      FVector KnockbackDirection, float Magnitude)
+{
+	KnockbackDirection.Normalize();
+	DamageEffectParams.KnockbackForce = KnockbackDirection * (Magnitude != 0.0f ? Magnitude : DamageEffectParams.KnockbackForceMagnitude);
+}
+
+void UAuraAbilitySystemLibrary::SetDeathImpulseDirection(FDamageEffectParams& DamageEffectParams,
+                                                         FVector ImpulseDirection, float Magnitude)
+{
+	ImpulseDirection.Normalize();
+	DamageEffectParams.DeathImpulse = ImpulseDirection * (Magnitude != 0.0f ? Magnitude : DamageEffectParams.DeathImpulseMagnitude);
+}
+
+void UAuraAbilitySystemLibrary::SetEffectParamsTargetASC(FDamageEffectParams& DamageEffectParams,
+	UAbilitySystemComponent* InASC)
+{
+	DamageEffectParams.TargetAbilitySystemComponent = InASC;
+}

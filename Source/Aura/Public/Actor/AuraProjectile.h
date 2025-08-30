@@ -30,8 +30,10 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	void OnHit();
 	virtual void Destroyed() override;
+
+	UFUNCTION(BlueprintCallable)
+	void OnHit();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<USphereComponent> Sphere;
@@ -39,12 +41,14 @@ protected:
 	UFUNCTION()
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	bool IsValidOverlap(AActor* OtherActor);
+	
+	bool bHit = false;
+
 private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float LifeSpan = 15.0f;
-
-	bool bHit = false;
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UNiagaraSystem> ImpactEffect;

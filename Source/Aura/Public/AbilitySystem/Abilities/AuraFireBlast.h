@@ -20,7 +20,7 @@ public:
 	virtual FString GetNextLevelDescription(int32 Level) override;
 
 	UFUNCTION(BlueprintCallable)
-	TArray<AAuraFireBall*> SpawnFireBall();
+	TArray<AAuraFireBall*> SpawnFireBalls();
 
 protected:
 
